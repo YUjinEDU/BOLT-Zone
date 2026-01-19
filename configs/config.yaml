@@ -1,0 +1,45 @@
+# BOLT-Zone Main Configuration
+# Hydra로 실험 관리를 위한 기본 설정 파일
+
+defaults:
+  - model: detect  # detect 또는 refine
+  - dataset: base
+  - train: default
+  - experiment: null  # 특정 실험 설정 오버라이드 (선택)
+  - _self_
+
+# 프로젝트 기본 경로
+project:
+  name: BOLT-Zone
+  root_dir: ${hydra:runtime.cwd}
+  data_dir: ${project.root_dir}/data
+  output_dir: ${project.root_dir}/outputs
+  
+# 실행 모드
+mode: train  # train, eval, infer, export
+
+# 디바이스 설정
+device:
+  type: cpu  # cpu, cuda, mps
+  num_workers: 4
+
+# 로깅 설정
+logging:
+  level: INFO
+  wandb:
+    enabled: false
+    project: bolt-zone
+    entity: null
+  tensorboard:
+    enabled: true
+    
+# 재현성
+seed: 42
+
+# Hydra 출력 디렉토리 설정
+hydra:
+  run:
+    dir: outputs/${now:%Y-%m-%d}/${now:%H-%M-%S}
+  sweep:
+    dir: outputs/multirun/${now:%Y-%m-%d}/${now:%H-%M-%S}
+    subdir: ${hydra.job.num}

@@ -1,0 +1,33 @@
+# BOLT-Detect 모델 설정
+# YOLO26n 기반 빠른 공 검출 모델
+
+name: yolo26n-detect
+type: detect
+task: detect
+
+# 모델 가중치
+weights:
+  pretrained: yolo26n.pt  # Ultralytics pretrained
+  checkpoint: null  # 이전 학습 체크포인트 경로
+
+# 모델 하이퍼파라미터
+model:
+  nc: 1  # number of classes (ball)
+  names: ['ball']
+  
+# 입력 이미지
+input:
+  imgsz: 640  # 입력 이미지 크기
+  augment: true  # 추론 시 TTA (Test-Time Augmentation)
+
+# NMS (Non-Maximum Suppression) 설정
+nms:
+  conf: 0.25  # confidence threshold
+  iou: 0.7  # IoU threshold for NMS
+  max_det: 10  # 최대 검출 개수
+
+# Export 설정
+export:
+  format: onnx  # onnx, openvino, tensorrt
+  optimize: true
+  simplify: true

@@ -1,0 +1,37 @@
+# 빠른 프로토타입 실험 설정
+# @package _global_
+
+# config.yaml의 기본값을 오버라이드
+
+defaults:
+  - override /model: detect
+  - override /dataset: base
+  - override /train: default
+
+# 실험 메타정보
+experiment:
+  name: quick_prototype
+  description: "빠른 프로토타입 테스트 - 작은 데이터셋, 짧은 epoch"
+  tags: [prototype, debug]
+
+# 학습 오버라이드
+train:
+  epochs: 10  # 빠른 테스트
+  batch: 8
+  patience: 5
+  
+model:
+  input:
+    imgsz: 320  # 작은 이미지로 빠르게
+
+# 디바이스
+device:
+  type: cpu
+  num_workers: 2
+
+# 로깅
+logging:
+  wandb:
+    enabled: false
+  tensorboard:
+    enabled: false

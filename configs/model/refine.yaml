@@ -1,0 +1,39 @@
+# BOLT-Refine 모델 설정
+# YOLO26n-OBB 기반 블러 스트릭 정밀 검출 모델
+
+name: yolo26n-obb-refine
+type: refine
+task: obb  # Oriented Bounding Box
+
+# 모델 가중치
+weights:
+  pretrained: yolo26n-obb.pt  # Ultralytics OBB pretrained
+  checkpoint: null
+
+# 모델 하이퍼파라미터
+model:
+  nc: 1  # number of classes (ball)
+  names: ['ball_blur']
+  
+# 입력 이미지
+input:
+  imgsz: 640
+  augment: true
+  
+# ROI (Region of Interest) 설정
+# Gate가 ON일 때 Detect 박스 주변만 처리
+roi:
+  expand_ratio: 1.5  # Detect bbox 기준 확장 비율
+  min_size: 64  # 최소 ROI 크기 (픽셀)
+
+# NMS 설정
+nms:
+  conf: 0.3  # Refine은 약간 높은 threshold
+  iou: 0.5  # OBB IoU threshold
+  max_det: 5
+
+# Export 설정
+export:
+  format: onnx
+  optimize: true
+  simplify: true

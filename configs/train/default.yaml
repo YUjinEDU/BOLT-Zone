@@ -1,0 +1,43 @@
+# 학습 기본 설정
+
+# Ultralytics YOLO 학습 파라미터
+epochs: 100
+batch: 16  # -1 for auto-batch
+patience: 50  # EarlyStopping patience (epochs)
+
+# Optimizer
+optimizer: AdamW
+lr0: 0.001  # initial learning rate
+lrf: 0.01  # final learning rate (lr0 * lrf)
+momentum: 0.937
+weight_decay: 0.0005
+
+# Scheduler
+scheduler: cosine  # linear, cosine
+
+# Loss weights (YOLO)
+box: 7.5  # box loss gain
+cls: 0.5  # class loss gain
+dfl: 1.5  # DFL loss gain
+
+# 학습 안정성
+amp: true  # Automatic Mixed Precision
+deterministic: true  # 재현성 보장 (속도 약간 느려질 수 있음)
+
+# Validation
+val: true  # validate during training
+val_interval: 1  # validate every N epochs
+save_period: -1  # save checkpoint every N epochs (-1: disabled)
+
+# 체크포인트 저장
+save:
+  best: true  # best.pt 저장
+  last: true  # last.pt 저장
+  
+# Resume 설정
+resume: false  # 이전 학습 재개 여부
+pretrained: true  # pretrained weights 사용 여부
+
+# Multi-GPU (향후)
+multi_gpu: false
+gpu_ids: [0]

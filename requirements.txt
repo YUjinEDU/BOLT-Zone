@@ -1,0 +1,47 @@
+# BOLT-Zone 프로젝트 의존성
+
+# Core ML Framework
+ultralytics>=8.3.0  # YOLO26, OBB, Track 지원
+
+# Computer Vision
+opencv-python>=4.8.0
+opencv-contrib-python>=4.8.0  # ArUco 마커 지원
+
+# Deep Learning
+torch>=2.0.0
+torchvision>=0.15.0
+
+# Experiment Management
+hydra-core>=1.3.0
+omegaconf>=2.3.0
+
+# Tracking
+filterpy>=1.4.5  # Kalman Filter
+
+# Logging & Monitoring
+tensorboard>=2.13.0
+wandb>=0.15.0  # optional
+
+# Data Processing
+numpy>=1.24.0
+pandas>=2.0.0
+pillow>=10.0.0
+
+# Visualization
+matplotlib>=3.7.0
+seaborn>=0.12.0
+
+# Utilities
+pyyaml>=6.0
+tqdm>=4.65.0
+rich>=13.0.0  # 예쁜 터미널 출력
+
+# Export & Inference
+onnx>=1.14.0
+onnxruntime>=1.15.0  # CPU 추론
+# openvino-dev>=2023.0.0  # Intel CPU 최적화 (선택)
+
+# Development Tools (optional)
+pytest>=7.3.0
+black>=23.0.0
+flake8>=6.0.0

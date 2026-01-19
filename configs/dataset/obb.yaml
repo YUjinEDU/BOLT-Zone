@@ -1,0 +1,40 @@
+# BOLT-Zone OBB 데이터셋 설정 (블러 스트릭 라벨)
+
+name: bolt-zone-obb
+task: obb  # Oriented Bounding Box
+
+# 데이터 경로
+path: ${project.data_dir}/yolo_obb
+train: images/train
+val: images/val
+test: images/test
+
+# 클래스 정보
+nc: 1
+names: ['ball_blur']
+
+# OBB 라벨 포맷
+# YOLO OBB는 4개 꼭짓점 좌표 사용: class x1 y1 x2 y2 x3 y3 x4 y4
+# 모든 좌표는 0-1 정규화
+label_format: vertices  # vertices (4 points) or center (cx, cy, w, h, angle)
+
+# 블러 스트릭 특성
+blur:
+  min_length: 5  # 최소 블러 길이 (픽셀)
+  max_length: 100  # 최대 블러 길이
+  aspect_ratio_range: [2.0, 20.0]  # 길쭉한 비율 (length/width)
+
+# 데이터 증강 (OBB는 회전 불변성 필요)
+augmentation:
+  hsv_h: 0.015
+  hsv_s: 0.7
+  hsv_v: 0.4
+  degrees: 0.0  # OBB는 자체적으로 회전 정보 포함
+  translate: 0.1
+  scale: 0.5
+  shear: 0.0
+  perspective: 0.0
+  flipud: 0.0
+  fliplr: 0.0
+  mosaic: 0.5  # OBB에서는 약간 낮게
+  mixup: 0.0

@@ -1,0 +1,42 @@
+# BOLT-Zone 데이터셋 기본 설정
+
+name: bolt-zone-base
+task: detect  # detect 또는 obb
+
+# 데이터 경로 (YOLO 형식)
+# path: 데이터셋 루트 (절대 또는 상대 경로)
+# train, val, test: 이미지 디렉토리 (path 기준 상대 경로)
+path: ${project.data_dir}/yolo_detect
+train: images/train
+val: images/val
+test: images/test
+
+# 클래스 정보
+nc: 1  # number of classes
+names: ['ball']
+
+# 데이터셋 통계 (정규화용, 학습 중 계산됨)
+mean: [0.485, 0.456, 0.406]
+std: [0.229, 0.224, 0.225]
+
+# 시점(도메인) 정보
+# 논문 실험을 위한 도메인 분리 테스트 설정
+domains:
+  umpire: true  # 심판 시점 (MLB/Skilled Catcher)
+  catcher_pov: true  # 포수 POV
+  custom: true  # 직접 촬영
+  
+# 데이터 증강 (학습 시)
+augmentation:
+  hsv_h: 0.015  # HSV Hue augmentation
+  hsv_s: 0.7  # HSV Saturation augmentation
+  hsv_v: 0.4  # HSV Value augmentation
+  degrees: 0.0  # 회전 (야구는 카메라 고정이므로 0)
+  translate: 0.1  # 평행 이동
+  scale: 0.5  # 스케일 변화
+  shear: 0.0  # 전단 변환
+  perspective: 0.0  # 원근 변환
+  flipud: 0.0  # 상하 반전 (야구는 의미 없음)
+  fliplr: 0.0  # 좌우 반전 (타석 방향 바뀌므로 주의)
+  mosaic: 1.0  # Mosaic augmentation
+  mixup: 0.0  # MixUp augmentation

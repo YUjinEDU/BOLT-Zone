@@ -1,0 +1,29 @@
+# CPU 최적화 학습 실험
+# @package _global_
+
+defaults:
+  - override /model: detect
+  - override /dataset: base
+  - override /train: default
+
+experiment:
+  name: cpu_optimized
+  description: "CPU 환경 최적화 학습"
+  tags: [cpu, optimization]
+
+train:
+  epochs: 50
+  batch: 4  # CPU에서는 작은 배치
+  amp: false  # CPU에서는 AMP 비활성화
+  
+model:
+  input:
+    imgsz: 640
+
+device:
+  type: cpu
+  num_workers: 4
+
+logging:
+  tensorboard:
+    enabled: true
