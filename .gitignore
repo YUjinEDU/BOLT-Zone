@@ -1,3 +1,7 @@
 data/
 outputs/
 Repo/
+.agent/
+Daily/
+01_Projects/
+docs/

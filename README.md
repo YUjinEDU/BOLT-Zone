@@ -2,91 +2,153 @@
 
 [![Python](https://img.shields.io/badge/Python-3.9%2B-blue.svg)](https://www.python.org/)
 [![YOLO](https://img.shields.io/badge/YOLO-26-green.svg)](https://docs.ultralytics.com/)
-[![Hydra](https://img.shields.io/badge/Config-Hydra-orange.svg)](https://hydra.cc/)
+[![Hydra](https://img.shields.io/badge/Config-Hydra# ⚡ BOLT-Zone: Deep Learning Baseball Strike Zone
 
-**BOLT-Zone**은 야구공의 **모션 블러를 정보로 활용**하는 blur-aware 철학을 기반으로, **YOLO26 + OBB(회전 박스)**와 **가변연산 게이팅**을 결합하여 **노트북 CPU에서도 실시간 스트라이크 판정**을 목표로 하는 시스템입니다.
+**BOLT-Zone**은 저사양 노트북(CPU)에서도 실시간으로 작동하는 딥러닝 기반 야구 스트라이크존 판정 시스템입니다.
+기존의 색상 기반 추적이 아닌, **YOLO26**과 **Motion Blur Analysis**를 결합하여 다양한 조명과 환경에서도 강인한 성능을 보장합니다.
 
-## 🎯 핵심 특징
+---
 
-- **Blur-Aware Detection**: 모션 블러를 노이즈가 아닌 속도/방향 정보로 활용
-- **2-Stage Architecture**: 가벼운 Detect + 정밀한 Refine (필요시만)
-- **CPU Real-time**: 가변연산 게이팅으로 CPU에서도 실시간 동작
-- **Experiment Management**: Hydra 기반 체계적인 실험 관리
+## 🚀 Key Features
 
-## 📂 프로젝트 구조
+### 1. Hybrid Detection Pipeline 🧠
+- **BOLT-Detect (YOLO26n)**: 공의 위치를 빠르게 탐지 (Coarse Stage).
+- **BOLT-Refine (YOLO26n-OBB)**: 모션 블러의 방향과 길이를 정밀 분석 (Fine Stage).
+- **Adaptive Inference**: `GateNet`이 난이도를 판단하여 필요한 프레임만 정밀 분석 (Efficiency Up!).
 
-```
-BOLT-Zone/
-├── bolt/                    # 핵심 모듈
-│   ├── detect/              # YOLO26n 빠른 검출
-│   ├── refine/              # YOLO26n-OBB 블러 정밀화
-│   ├── track/               # ByteTrack/BoT-SORT 추적
-│   ├── gate/                # 가변연산 게이팅 로직
-│   ├── zone/                # 스트라이크존 판정
-│   └── utils/               # 공통 유틸리티
-│
-├── configs/                 # Hydra 설정 파일
-│   ├── config.yaml          # 메인 설정
-│   ├── model/               # Detect/Refine 모델 설정
-│   ├── dataset/             # 데이터셋 설정
-│   ├── train/               # 학습 하이퍼파라미터
-│   └── experiment/          # 실험별 프리셋
-│
-├── data/                    # 데이터셋
-│   ├── raw/                 # 원본 영상
-│   ├── clips/               # 공 등장 구간 클립
-│   ├── yolo_detect/         # bbox 라벨
-│   └── yolo_obb/            # OBB 라벨
-│
-├── scripts/                 # 스크립트
-├── docs/                    # 문서
-├── runs/                    # 학습 결과
-└── outputs/                 # Hydra 실행 결과
+### 2. Physics-Informed 3D Tracking ⚾
+- **Aerodynamic Model**: 공기 저항($C_d$)과 중력($g$)을 고려한 물리 엔진 탑재.
+- **Trajectory Fitting**: 노이즈가 섞인 관측 데이터에서도 실제 투구 궤적을 완벽하게 복원.
 
-```
+### 3. Quantitative Evaluation 📊
+- **Benchmark Driven**: Recall 99%, Precision 95% 목표.
+- **Latency Monitoring**: CPU p95 지연 시간 측정 시스템 내장.
 
-## 🚀 빠른 시작
+---
 
-### 1. 환경 설정
+## 📂 Project Structure
 
 ```bash
-# 저장소 클론
-git clone <repository-url>
+BOLT-Zone/
+├── bolt/                # Core Python Package
+│   ├── detect/          # YOLO26n Detector
+│   ├── refine/          # YOLO26n-OBB Blur Analyzer
+│   ├── track/           # Physics-based Tracker
+│   │   └── physics.py   # ⚾ Physics Engine
+│   ├── gate/            # Adaptive Inference
+│   │   ├── engine.py    # Rule-based Engine
+│   │   └── network.py   # 🧠 GateNet (MLP)
+│   └── zone/            # Strike Zone Judgment
+│
+├── configs/             # Hydra Configurations
+│   ├── model/           # Model Params
+│   ├── dataset/         # Dataset & Augmentation
+│   └── experimnet/      # Experiment Presets
+│
+├── data/                # Dataset Directory
+│   ├── raw/             # YouTube Downloads
+│   ├── yolo_detect/     # Detection Dataset
+│   └── yolo_obb/        # OBB Dataset
+│
+├── docs/                # Documentation
+│   ├── dataset_spec.md        # 📝 데이터셋 규격
+│   ├── labeling_guide.md      # 🏷️ 라벨링 가이드 (OBB)
+│   ├── evaluation_protocol.md # 📏 평가 프로토콜
+│   └── youtube_download.md    # 📥 데이터 수집 가이드
+│
+└── scripts/             # Execution Scripts
+    ├── train.py         # 학습 (Train/Val)
+    ├── export.py        # 배포 (ONNX/OpenVINO)
+    ├── evaluate.py      # 평가 (Metrics)
+    ├── benchmark.py     # 성능 측정 (Latency)
+    ├── train_gate.py    # GateNet 학습
+    └── download_youtube.py # 데이터 수집
+```
+
+---
+
+## ⚡ Quick Start
+
+### 1. Installation
+
+```bash
+# Clone Repository
+git clone https://github.com/yujin/BOLT-Zone.git
 cd BOLT-Zone
 
-# 의존성 설치
+# Install Dependencies
 pip install -r requirements.txt
 ```
 
-### 2. Hydra 기반 실험 실행
+### 2. Data Collection
+
+**데이터 수집 전략**: 실제 데이터 우선 + Augmentation
+
+#### 2.1 YouTube 영상 다운로드 (Primary Source)
+
+[YouTube 다운로드 가이드](docs/youtube_download_guide.md)를 참고하세요.
 
 ```bash
-# 기본 학습 (Detect 모델)
+# 단일 영상 다운로드
+python scripts/download_youtube.py --url "https://youtu.be/..." --domain umpire
+
+# Manifest 기반 일괄 다운로드 (권장)
+python scripts/download_youtube.py --manifest data/youtube_manifest.json
+```
+
+**추천 채널:**
+- **심판 시점 (Umpire View)**: [MLB Official](https://www.youtube.com/@MLB), Skilled Catcher
+- **포수 POV**: [POV BASEBALL](https://www.youtube.com/results?search_query=POV+BASEBALL)
+
+#### 2.2 Data Augmentation
+
+실제 데이터에 다양한 증강 기법을 적용하여 데이터셋 확장:
+- 밝기/대비 조절 (야간/주간 시뮬레이션)
+- 모션 블러 강도 조절
+- 회전, Crop, Flip
+- **Albumentations** 라이브러리 사용 (YOLO 학습 시 자동 적용)
+
+> **Note**: 물리 기반 합성 데이터 생성(`scripts/generate_synthetic.py`)은 현재 보류 중입니다. 
+> 실제 데이터와 괴리가 커서 학습 효과가 제한적이므로, 실제 데이터 수집 및 증강에 집중합니다.
+
+
+### 3. Training
+
+[학습 가이드](scripts/README_training.md)를 참고하세요.
+
+```bash
+# Detect 모델 학습
 python scripts/train.py
 
-# 특정 실험 설정 사용
-python scripts/train.py +experiment=quick_prototype
-
-# 설정 오버라이드
-python scripts/train.py model=refine train.epochs=50 device.type=cuda
-
-# 멀티런 (하이퍼파라미터 스윕)
-python scripts/train.py -m train.lr0=0.001,0.01,0.1
+# GateNet 학습 (Synthetic Data)
+python scripts/train_gate.py
 ```
 
-### 3. Hydra 설정 구조
+### 4. Benchmark
 
-#### 기본 사용법
-```yaml
-# configs/config.yaml이 기본 설정
-# defaults로 각 카테고리별 설정 조합
+시스템의 실시간 성능을 측정합니다.
 
-defaults:
-  - model: detect        # or refine
-  - dataset: base        # or obb
-  - train: default
-  - experiment: null     # 선택적 오버라이드
+```bash
+python scripts/benchmark.py --detect weights/best.onnx --refine weights/obb.onnx
 ```
+
+---
+
+## 📚 Documentation
+
+- **[데이터셋 규격서](docs/dataset_spec.md)**: 데이터 포맷 및 물리 규격 정의
+- **[라벨링 가이드](docs/labeling_guide.md)**: OBB 라벨링 방법론 (CVAT)
+- **[평가 프로토콜](docs/evaluation_protocol.md)**: 성능 평가 지표 및 방법
+- **[학습 가이드](scripts/README_training.md)**: 모델 학습부터 배포까지
+
+---
+
+## 🛠️ Tech Stack
+
+- **Framework**: PyTorch, Ultralytics YOLO
+- **Config**: Hydra, OmegaConf
+- **Inference**: ONNX Runtime, OpenVINO
+- **Ops**: WandB, TensorBoard
 
 #### 실험 프리셋 예시
 ```bash
